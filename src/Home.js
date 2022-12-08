@@ -1,3 +1,6 @@
+import Items from "./Items"
+import React, { useState } from "react";
+import ToDoList from "./ToDoList";
 const Home = () => {
     const data = [
         {title: "Learn React", priority: "high"},
@@ -6,19 +9,13 @@ const Home = () => {
         {title: "Do the homework", priority: "medium"},
         {title: "Study Electronics", priority: "low"},
     ]
-    const boxes = data.map((dat,index) =>{
-                return  <div className="box">
-                    <h3 className="title">{(data[index].priority === 'medium' || data[index].priority  === 'high' ) && data[index].title}</h3>
-                    <h4 className="priority">{(data[index].priority === 'medium' || data[index].priority  === 'high' ) && data[index].priority}</h4>
-                </div> 
-                
-            })
-
+    const [item,setItem] = useState([]);
+    
     return( 
         <div>
             <nav>
                 <label className="header" >
-                    My TO LIST
+                    My TODO LIST
                 </label>
                 <ul>
                     <li><a href="#">Link 1</a></li>
@@ -29,13 +26,23 @@ const Home = () => {
             <div>
                 <form>
                     <input className="textInput" placeholder="Write your Task" type="text" />
-                    <button className="highP">Priority: HIGH</button>
-                    <button className="add">Add</button>
+                    <label id="prioTitle">Priority :</label>
+                    <select name="priority" id="priority">
+                        <option className="option" value="High">High</option>
+                        <option className="option" value="Medium">Medium</option>
+                        <option className="option" value="Low">Low</option>
+                    </select>
+                    <button onClick={(e)=> {
+                        e.preventDefault();
+                        setItem([...item,{title:document.querySelector(".textInput").value,priority:document.querySelector("#priority").value}]);
+                        console.log(item)
+                    }}  className="add">Add</button>
                 </form>
             </div>
             <div className="tasks">
-                {boxes}
-            </div>
+                {/* <ToDoList data={data} />  */}
+                <Items  item={item} />
+            </div> 
             <footer>
                 footer
             </footer>
