@@ -9,11 +9,16 @@ const Home = () => {
     const [loading,setLoading] = useState(false);
     const [data,setData]= useState(null);
 
-    const getData = ()=> {
-        fetch('http://localhost:8000/data')
-        .then(data=>{return data.json()})
-        .then((data)=>{setData(data); setLoading(false)})
-        .catch((error)=>{console.log(error)})
+    const getData = async ()=> {
+        try {
+            await fetch('http://localhost:8000/data')
+            .then(data=>{return data.json()})
+            .then((data)=>{setData(data); setLoading(false)})
+        }
+        catch (error) {
+            console.log(error)
+        }
+        
     }
 
     useEffect(()=>{
@@ -41,11 +46,16 @@ const Home = () => {
 
 
 
-const deleteData = (id)=>{
-    fetch(`http://localhost:8000/data/${id}`,
+const deleteData = async (id)=>{
+    try {
+    await fetch(`http://localhost:8000/data/${id}`,
     {method:'DELETE'})
     .then(res => res.json)
     .then((res)=>console.log(res));
+    }
+    catch (error) {
+        console.log(error)
+    }
     getData()
 };
 
@@ -69,10 +79,11 @@ const deleteData = (id)=>{
     //     setItem(newData)
     // }
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        try {
         const newData = { title: name, priority: priority}
-        fetch('http://localhost:8000/data', {
+        await fetch('http://localhost:8000/data', {
         method: 'POST',
         body: JSON.stringify(newData),
         headers: {
@@ -81,7 +92,11 @@ const deleteData = (id)=>{
         },
         }).then((data)=>{return data.json()})
         .then((data)=> console.log(data))
-        .catch((error)=> console.log(error));
+        }
+
+        catch (error) {
+            console.log(error)
+        };
         getData()
 };
 
